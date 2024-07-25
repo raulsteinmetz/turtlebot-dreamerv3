@@ -1,0 +1,102 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='obstacles_stage3'>
+    <pose frame=''>0 0 0 0 0 0</pose>
+    <link name='obstacle'>
+      <!-- Define the U-shaped obstacle using three box geometries -->
+      
+      <!-- single wall -->
+      <collision name='single_wall'>
+        <pose>0 1.7 0 0 0 0.8</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 0.8</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </collision>
+      <visual name='single_wall'>
+        <pose>0 1.7 0 0 0 0.8</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 0.8</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </visual>
+
+      <!-- little square -->
+      <collision name='little_square'>
+        <pose>-0.2 -1.45 0 0 0 0</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>0.2 0.2 1.0</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </collision>
+      <visual name='little_square'>
+        <pose>-0.2 -1.45 0 0 0 0</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>0.2 0.2 1.0</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </visual>
+
+      <!-- composite wall 1 -->
+      <collision name='compo_wall_1'>
+        <pose>-0.2 -0.2 0 0 0 0.8</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </collision>
+      <visual name='compo_wall_1'>
+        <pose>-0.2 -0.2 0 0 0 0.8</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </visual>
+
+      <!-- composite wall 2 -->
+      <collision name='compo_wall_2'>
+        <pose>-0.8 0 0 0 0 -0.75</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </collision>
+      <visual name='compo_wall_2'>
+        <pose>-0.8 0 0 0 0 -0.75</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </visual>
+
+      <!-- composite wall 3 -->
+      <collision name='compo_wall_3'>
+        <pose>0.6 -.33 0 0 0 -0.75</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </collision>
+      <visual name='compo_wall_3'>
+        <pose>0.6 -.33 0 0 0 -0.75</pose> <!-- Adjust pose as needed -->
+        <geometry>
+          <box>
+            <size>1.2 0.3 1</size> <!-- Adjust size as needed -->
+          </box>
+        </geometry>
+      </visual>
+
+     
+    </link>
+    <static>1</static>
+  </model>
+</sdf>

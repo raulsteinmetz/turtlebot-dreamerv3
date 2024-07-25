@@ -1,0 +1,1 @@
+tensorboard --logdir ./logdir/stage{stage}_{lidar}
