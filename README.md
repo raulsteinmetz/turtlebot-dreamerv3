@@ -18,11 +18,20 @@ performance in most scenarios with both full (360) and reduced (10) lidar readin
 the standard in previous works. Notably, our approach achieves 100\% completion in every tested 
 environment with the full 360 readings, a performance unmatched by previous works.
 
+### Architecture
+
+#### World Model Traning
+
+![world_model_learning-1](https://github.com/user-attachments/assets/57c8696e-b12c-4797-8cfc-95be21733852)
+
+
+#### Actor Critic Learning
+
+![actor_critic_learning-1](https://github.com/user-attachments/assets/7e0c4fd3-f8f2-4f19-b4b3-997e1ff5080e)
+
 ### Environments
 
-| <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/c7d5ca7b-f225-40b1-bb0e-c13a03827fdd" width="200"/> | <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/78fb7a5f-9f91-4873-8a66-5c2a811a8b76" width="200"/> | <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/14fa1182-069f-4a2b-9ad2-47d7a17889ae" width="200"/> |
-|---------------------------|---------------------------|---------------------------|
-| <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/6e21f9f2-e7b8-42ac-a7af-a7e50838236a" width="200"/> | <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/b45563b2-ba57-4f90-bcac-bdca552bf9a9" width="200"/> | <img src="https://github.com/raulsteinmetz/turtle-dreamer/assets/85199336/5f4a91ac-c189-423c-bba9-b3f62f8c58f3" width="200"/> |
+![environments-1](https://github.com/user-attachments/assets/d41377b8-77c8-4ccf-93ef-956a2742f8d1)
 
 
 ### Results
@@ -57,12 +66,12 @@ Success rate on tests over 100 episodes in the turtlebot navigation stages for 3
 
 Learning curves for 10 distance readings as input:
 
-![comparison_stages_episodes_2x3](https://github.com/user-attachments/assets/a78b274d-c8f1-4184-bfb1-5e9ed1e85c9a)
+![comparison_stages_episodes_2x3](https://github.com/user-attachments/assets/fbeba89e-9ff4-43e5-b2ab-d0c93a6138a3)
+
 
 Learning curves plots for 360 distance readings as input:
 
-![comparison_stages_episodes_2x3](https://github.com/user-attachments/assets/bf01e62f-6954-48e7-bdcb-674ad3869550)
-
+![comparison_stages_episodes_2x3](https://github.com/user-attachments/assets/8f0abf10-3f8a-4ca4-9d01-ac6ca308bef5)
 
 
 ### Configuring ROS packages
