@@ -12,9 +12,12 @@ risk, and reducing navigation performance. Additionally, these architectures are
 model-free, missing the advantages of using a transition dynamics model that
 could improve decision-making. In this study, we present a new architecture for
 terrestrial robot navigation using distance readings, based on the DreamerV3
-algorithm, that makes use of world modeling through an environment dynamics 
-tested on the TurtleBot3 robot in simulation and outperformed traditional algorithms with both full and reduced distance readings. Notably, it achieved 100%
-completion in all tested environments with full 360-degree readings.predictor and an autoencoder for observation processing. Our approach was
+algorithm, that makes use of world modeling through an environment dynam-
+ics predictor and an autoencoder for observation processing. Our approach was
+tested on the TurtleBot3 robot in simulation and outperformed traditional algo-
+rithms with both full and reduced distance readings. Notably, it achieved 100%
+completion in all tested environments with full 360-degree readings.
+
 
 ### Architecture
 
