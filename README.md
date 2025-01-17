@@ -1,39 +1,22 @@
-# Encoded Representations and World Modeling <br> for Autonomous Terrestrial Robot Navigation
+# World Models for Autonomous Terrestrial Robot Navigation
 
-Reinforcement learning (RL) algorithms have proven to be highly effective for
-autonomous navigation of terrestrial robots using distance readings from infrared
-sensors as environment observations. However, current RL architectures for
-mobile navigation do not separate the processing of observations from policy
-learning, which limits their ability to handle large sets of sensor readings due
-to the extensive parameter search space required for the policy network. This
-limitation forces the use of a small sample of the original sensor readings as
-observation, providing a poor description of the environment, increasing collision
-risk, and reducing navigation performance. Additionally, these architectures are
-model-free, missing the advantages of using a transition dynamics model that
-could improve decision-making. In this study, we present a new architecture for
-terrestrial robot navigation using distance readings, based on the DreamerV3
-algorithm, that makes use of world modeling through an environment dynamics predictor and an autoencoder for observation processing. Our approach was
-tested on the TurtleBot3 robot in simulation and outperformed traditional algorithms with both full and reduced distance readings. Notably, it achieved 100%
-completion in all tested environments with full 360-degree readings.
-
-
-### Architecture
-
-#### Vision Model Learning
-
-![vision](https://github.com/user-attachments/assets/619f1c57-e310-442f-a4b4-d10881475554)
-
-#### Memory Model Learning
-
-![mem](https://github.com/user-attachments/assets/6559a9ce-bc91-48c1-a9c1-c23467cf7833)
-
-#### Control Model Learning
-
-![control](https://github.com/user-attachments/assets/f4d1603e-54c8-4501-8ca4-73d2e8f04aff)
-
-### Environments
-
-![environments-1](https://github.com/user-attachments/assets/d41377b8-77c8-4ccf-93ef-956a2742f8d1)
+Reinforcement learning (RL) algorithms have proven to be highly effective for au-
+tonomous navigation of terrestrial robots using distance readings from infrared sen-
+sors as environment observations. However, current RL architectures for mobile nav-
+igation do not separate the processing of observations from policy learning, which
+limits their ability to handle large sets of sensor readings due to the extensive pa-
+rameter search space required for the policy network. This limitation forces the use
+of a small sample of the original sensor readings as observation, providing a poor
+description of the environment, increasing collision risk, and reducing navigation per-
+formance. Additionally, these architectures are model-free, missing the advantages
+of using a transition dynamics model that could improve decision-making. In this
+study, we present a new architecture for terrestrial robot navigation using distance
+readings, based on the DreamerV3 algorithm, which makes use of world modeling
+through an environment dynamics predictor and an autoencoder for observation
+processing. Our approach was tested on the TurtleBot3 robot in simulation and
+outperformed traditional algorithms with both full and reduced distance readings.
+Notably, it achieved 100% completion in all tested environments with full 360-degree
+readings.
 
 
 ### Results
