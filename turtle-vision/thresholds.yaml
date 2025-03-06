@@ -1,0 +1,12 @@
+pink:
+  lower: [140, 50, 50]
+  upper: [170, 255, 255]
+yellow:
+  lower: [20, 200, 200]
+  upper: [30, 255, 255]
+dark_blue:
+  lower: [110, 140, 190]
+  upper: [130, 255, 255]
+light_blue:
+  lower: [84, 230, 230]
+  upper: [104, 255, 255]

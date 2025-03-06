@@ -8,7 +8,7 @@ os.environ["MUJOCO_GL"] = "osmesa"
 
 import numpy as np
 import pandas as pd
-import ruamel.yaml as yaml
+from ruamel.yaml import YAML
 
 sys.path.append(str(pathlib.Path(__file__).parent))
 
@@ -152,7 +152,7 @@ def make_env(config, mode, id):
 
     if not rclpy.ok():
         rclpy.init()
-    env = turtle.Turtle(6, 300, 10)
+    env = turtle.Turtle(4, 300, 360)
     env = wrappers.UUID(env)
     return env
 
@@ -310,7 +310,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--configs", nargs="+")
     args, remaining = parser.parse_known_args()
-    configs = yaml.safe_load(
+    yaml = YAML(typ='safe', pure=True)
+    configs = yaml.load(
         (pathlib.Path(sys.argv[0]).parent / "configs.yaml").read_text()
     )
 

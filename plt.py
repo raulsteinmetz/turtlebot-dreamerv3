@@ -75,9 +75,9 @@ def plot_learning_curves(agents, stages, lidar):
 
     plt.tight_layout(rect=[0, 0.1, 1, 0.95])
     if int(_lidar) == 0:
-        fig.savefig(f'plots/any_lidar/comparison_stages_episodes_2x3.pdf', format='pdf', bbox_inches='tight')
+        fig.savefig(f'plots/any_lidar/comparison_stages_episodes_2x3.png', format='png', bbox_inches='tight')
     else:
-        fig.savefig(f'plots/lidar{lidar}/comparison_stages_episodes_2x3.pdf', format='pdf', bbox_inches='tight')
+        fig.savefig(f'plots/lidar{lidar}/comparison_stages_episodes_2x3.png', format='png', bbox_inches='tight')
     plt.show()
 
 if __name__ == '__main__':
