@@ -38,11 +38,10 @@ def compute_scale(yellow_centers):
     if len(yellow_centers) < 2:
         return None
     distances = []
-    for i, center in enumerate(yellow_centers):
-        dists = [np.linalg.norm(np.array(center) - np.array(other))
-                 for j, other in enumerate(yellow_centers) if j != i]
-        if dists:
-            distances.append(min(dists))
+    for i in range(len(yellow_centers)):
+        for j in range(i+1, len(yellow_centers)):
+            distance = np.linalg.norm(np.array(yellow_centers[i]) - np.array(yellow_centers[j]))
+            distances.append(distance)
     if distances:
         return np.mean(distances)
     return None
@@ -74,12 +73,14 @@ def compute_robot_target_info(image, thresholds, merge_threshold=20):
     light_blue_center = results["light_blue"][0]
     pink_center = results["pink"][0]
     robot_mid = middle_point(dark_blue_center, light_blue_center)
-    d = (light_blue_center[0] - dark_blue_center[0], light_blue_center[1] - dark_blue_center[1])
+    d = (light_blue_center[0] - dark_blue_center[0],
+         light_blue_center[1] - dark_blue_center[1])
     if dark_blue_center[1] < light_blue_center[1]:
         orientation = (-d[1], d[0])
     else:
         orientation = (d[1], -d[0])
-    v_to_pink = (pink_center[0] - robot_mid[0], pink_center[1] - robot_mid[1])
+    v_to_pink = (pink_center[0] - robot_mid[0],
+                 pink_center[1] - robot_mid[1])
     angle = signed_angle_between(orientation, v_to_pink)
     pixel_distance = np.linalg.norm(v_to_pink)
     real_distance = pixel_distance / scale_pixels
@@ -95,16 +96,19 @@ def draw_robot_target_info(image, thresholds, merge_threshold=20):
     light_blue_center = results["light_blue"][0]
     pink_center = results["pink"][0]
     robot_mid = middle_point(dark_blue_center, light_blue_center)
-    d = (light_blue_center[0] - dark_blue_center[0], light_blue_center[1] - dark_blue_center[1])
+    d = (light_blue_center[0] - dark_blue_center[0],
+         light_blue_center[1] - dark_blue_center[1])
     if dark_blue_center[1] < light_blue_center[1]:
         orientation = (-d[1], d[0])
     else:
         orientation = (d[1], -d[0])
-    v_to_pink = (pink_center[0] - robot_mid[0], pink_center[1] - robot_mid[1])
+    v_to_pink = (pink_center[0] - robot_mid[0],
+                 pink_center[1] - robot_mid[1])
     angle = signed_angle_between(orientation, v_to_pink)
     pixel_distance = np.linalg.norm(v_to_pink)
     real_distance = pixel_distance / scale_pixels
-    
+
+    # Draw all circle centers in black.
     for centers in results.values():
         for center in centers:
             cv2.circle(image, center, 5, (0, 0, 0), -1)
@@ -114,11 +118,13 @@ def draw_robot_target_info(image, thresholds, merge_threshold=20):
         orientation_unit = (orientation[0] / orientation_norm, orientation[1] / orientation_norm)
     else:
         orientation_unit = (0, 0)
-    facing_line_end = (int(robot_mid[0] + orientation_unit[0] * 100), int(robot_mid[1] + orientation_unit[1] * 100))
+    facing_line_end = (int(robot_mid[0] + orientation_unit[0] * 100),
+                       int(robot_mid[1] + orientation_unit[1] * 100))
     cv2.line(image, robot_mid, facing_line_end, (255, 0, 0), 2)
     cv2.line(image, robot_mid, pink_center, (0, 255, 0), 2)
     text = f"Distance: {real_distance:.2f} m, Angle: {angle:.2f} deg"
-    cv2.putText(image, text, (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
+    cv2.putText(image, text, (10, image.shape[0] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
     return image
 
 def main():
