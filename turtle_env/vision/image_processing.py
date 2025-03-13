@@ -21,7 +21,7 @@ def detect_color_centers_from_image(image, lower_color, upper_color):
                 centers.append((cX, cY))
     return centers
 
-def merge_close_centers(centers, threshold=20):
+def merge_close_centers(centers, threshold=100):
     merged = []
     for center in centers:
         found = False
@@ -46,7 +46,7 @@ def compute_scale(yellow_centers):
         return np.mean(distances)
     return None
 
-def detect_all_colors_from_image(image, thresholds, merge_threshold=20):
+def detect_all_colors_from_image(image, thresholds, merge_threshold=100):
     results = {}
     for color, thresh in thresholds.items():
         centers = detect_color_centers_from_image(image, thresh['lower'], thresh['upper'])
@@ -63,7 +63,7 @@ def signed_angle_between(v1, v2):
     angle = angle2 - angle1
     return math.degrees(math.atan2(math.sin(angle), math.cos(angle)))
 
-def compute_robot_target_info(image, thresholds, merge_threshold=20):
+def compute_robot_target_info(image, thresholds, merge_threshold=100):
     results = detect_all_colors_from_image(image, thresholds, merge_threshold)
     yellow_centers = results.get("yellow", [])
     scale_pixels = compute_scale(yellow_centers)
@@ -86,7 +86,7 @@ def compute_robot_target_info(image, thresholds, merge_threshold=20):
     real_distance = pixel_distance / scale_pixels
     return real_distance, angle
 
-def draw_robot_target_info(image, thresholds, merge_threshold=20):
+def draw_robot_target_info(image, thresholds, merge_threshold=100):
     results = detect_all_colors_from_image(image, thresholds, merge_threshold)
     yellow_centers = results.get("yellow", [])
     scale_pixels = compute_scale(yellow_centers)
@@ -108,7 +108,6 @@ def draw_robot_target_info(image, thresholds, merge_threshold=20):
     pixel_distance = np.linalg.norm(v_to_pink)
     real_distance = pixel_distance / scale_pixels
 
-    # Draw all circle centers in black.
     for centers in results.values():
         for center in centers:
             cv2.circle(image, center, 5, (0, 0, 0), -1)
@@ -127,27 +126,27 @@ def draw_robot_target_info(image, thresholds, merge_threshold=20):
                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2)
     return image
 
-def main():
-    thresholds = {
-        "pink": {"lower": [140, 50, 50], "upper": [170, 255, 255]},
-        "yellow": {"lower": [20, 200, 200], "upper": [30, 255, 255]},
-        "dark_blue": {"lower": [110, 140, 190], "upper": [130, 255, 255]},
-        "light_blue": {"lower": [84, 230, 230], "upper": [104, 255, 255]}
-    }
-    image_files = glob.glob('./images/*.*')
-    for im_path in sorted(image_files):
-        image = cv2.imread(im_path)
-        if image is None:
-            print("Image not found:", im_path)
-            continue
-        real_distance, angle = compute_robot_target_info(image, thresholds, merge_threshold=20)
-        print(f"{im_path}: Real distance = {real_distance}, Angle = {angle}")
-        drawn_image = draw_robot_target_info(image, thresholds, merge_threshold=20)
-        cv2.imshow("Robot Target Info", drawn_image)
-        key = cv2.waitKey(0) & 0xFF
-        if key == ord('q'):
-            break
-    cv2.destroyAllWindows()
+# def main():
+#     thresholds = {
+#         "pink": {"lower": [140, 50, 50], "upper": [170, 255, 255]},
+#         "yellow": {"lower": [20, 200, 200], "upper": [30, 255, 255]},
+#         "dark_blue": {"lower": [110, 140, 190], "upper": [130, 255, 255]},
+#         "light_blue": {"lower": [84, 230, 230], "upper": [104, 255, 255]}
+#     }
+#     image_files = glob.glob('./images/*.*')
+#     for im_path in sorted(image_files):
+#         image = cv2.imread(im_path)
+#         if image is None:
+#             print("Image not found:", im_path)
+#             continue
+#         real_distance, angle = compute_robot_target_info(image, thresholds, merge_threshold=20)
+#         print(f"{im_path}: Real distance = {real_distance}, Angle = {angle}")
+#         drawn_image = draw_robot_target_info(image, thresholds, merge_threshold=20)
+#         cv2.imshow("Robot Target Info", drawn_image)
+#         key = cv2.waitKey(0) & 0xFF
+#         if key == ord('q'):
+#             break
+#     cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

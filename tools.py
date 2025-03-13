@@ -1,12 +1,17 @@
 from turtle_env.turtle import Turtle
+from turtle_env.real import Turtle as Real
 
 from model_free.sac.sac_torch import Agent as SAC
 from model_free.ddpg.ddpg_torch import Agent as DDPG
 from model_free.td3.td3_torch import Agent as TD3
 
 
-def make_env(stage: int, max_steps: int, lidar: int):
-    return Turtle(stage, max_steps, lidar)
+def make_env(stage: int, max_steps: int, lidar: int, real=False):
+    if not real:
+        return Turtle(stage, max_steps, lidar)
+    else:
+        return Real(stage, max_steps, lidar)
+    
 
 def make_agent(env: Turtle, configs: dict, test: bool = False):
     if configs['agent'] == 'sac':

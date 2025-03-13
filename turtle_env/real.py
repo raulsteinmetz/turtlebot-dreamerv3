@@ -1,6 +1,5 @@
 import rclpy
 import random
-import math
 import numpy as np
 import torch as T
 import torch.nn.functional as F
@@ -11,7 +10,8 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 from gazebo_msgs.srv import SpawnEntity, DeleteEntity, GetEntityState, SetEntityState
-import time
+from turtle_env.vision.image_processing import compute_robot_target_info
+import cv2
 
 
 import gym
@@ -50,14 +50,13 @@ def generate_target_sdf(x, y, z):
 class Env(Node):
     """
     A class representing the environment in which the TurtleBot operates. It is a ROS node 
-    that interacts with the Gazebo simulation environment.
+    that interacts with a real setup.
     """
     def __init__(self, stage, max_steps, lidar):
         """
         Initialize the environment node.
         """
         super().__init__("trainer_node")
-
 
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 1)
         self.odom_subscription = self.create_subscription(Odometry, '/odom', self.odom_callback, 1)
@@ -66,45 +65,11 @@ class Env(Node):
         self.delete_entity_client = self.create_client(DeleteEntity, '/delete_entity')
         self.reset_client = self.create_client(Empty, '/reset_simulation')
         self.get_entity_state_client = self.create_client(GetEntityState, '/demo/get_entity_state')
-        self.set_entity_state_client = self.create_client(SetEntityState, '/demo/set_entity_state')
-
-        # pause for rolout
-        self.pause_simulation_client = self.create_client(Empty, '/pause_physics')
-        self.unpause_simulation_client = self.create_client(Empty, '/unpause_physics')
-        
+        self.set_entity_state_client = self.create_client(SetEntityState, '/demo/set_entity_state')       
 
         self.reset_info()
         self.init_properties(stage, max_steps, lidar)
 
-    def pause_simulation(self):
-        """
-        Pause the Gazebo simulation.
-        """
-        try:
-            pause_request = Empty.Request()
-            future = self.pause_simulation_client.call_async(pause_request)
-            rclpy.spin_until_future_complete(self, future)
-            if future.result() is not None:
-                self.get_logger().info('Simulation paused successfully.')
-            else:
-                self.get_logger().error('Failed to pause simulation.')
-        except Exception as e:
-            self.get_logger().error('Service call failed %r' % (e,))
-
-    def unpause_simulation(self):
-        """
-        Unpause the Gazebo simulation.
-        """
-        try:
-            unpause_request = Empty.Request()
-            future = self.unpause_simulation_client.call_async(unpause_request)
-            rclpy.spin_until_future_complete(self, future)
-            if future.result() is not None:
-                self.get_logger().info('Simulation unpaused successfully.')
-            else:
-                self.get_logger().error('Failed to unpause simulation.')
-        except Exception as e:
-            self.get_logger().error('Service call failed %r' % (e,))
 
     def reset_info(self):
         """
@@ -117,11 +82,6 @@ class Env(Node):
         """
         Initialize the properties of the environment.
         """
-        self.num_states = 14
-        self.num_actions = 2
-        self.action_upper_bound = .25
-        self.action_lower_bound = -.25
-
         self.step_counter = 0
         self.reset_when_reached = True
         self.reached = False
@@ -129,6 +89,14 @@ class Env(Node):
         self.stage = stage
         self.max_steps = max_steps
         self.lidar = lidar
+
+        self.cap = cv2.VideoCapture(1) # open second camera NEW
+        self.color_thresholds = { # tresholds for target and turtle detection NEW
+            "pink": {"lower": [140, 50, 50], "upper": [170, 255, 255]},
+            "yellow": {"lower": [20, 200, 200], "upper": [30, 255, 255]},
+            "dark_blue": {"lower": [110, 140, 190], "upper": [130, 255, 255]},
+            "light_blue": {"lower": [84, 230, 230], "upper": [104, 255, 255]}
+        }
 
     def odom_callback(self, msg):
         """
@@ -159,17 +127,20 @@ class Env(Node):
         while self.scan_data is None or self.odom_data is None:
             rclpy.spin_once(self, timeout_sec=0.5)
 
-        turtle_x = self.odom_data.pose.pose.position.x
-        turtle_y = self.odom_data.pose.pose.position.y
+        if not self.cap.isOpened():
+            print("Camera is not Open!!!!!")
+            exit()
 
+        ret, frame = self.cap.read()
+        if not ret:
+            print("Can't receive frame (stream end?). Exiting ...")
+            self.cap.release()
+            exit()
 
-        q = self.odom_data.pose.pose.orientation
-        yaw = math.atan2(2 * (q.w * q.z + q.x * q.y), 1 - 2 * (q.y * q.y + q.z * q.z))
+        # frame = cv2.imread('turtle_env/vision/images/WIN_20250129_14_04_15_Pro.jpg')
 
-        angle_to_target = math.atan2(self.target_y - turtle_y, self.target_x - turtle_x) - yaw
-        angle_to_target = math.atan2(math.sin(angle_to_target), math.cos(angle_to_target))
-
-        distance_to_target = math.sqrt((self.target_x - turtle_x) ** 2 + (self.target_y - turtle_y) ** 2)
+        distance_to_target, angle_to_target = compute_robot_target_info(image=frame, thresholds=self.color_thresholds, merge_threshold=100) # NEW
+                
 
         lidar_readings = self.scan_data.ranges
         num_samples = self.lidar
@@ -178,8 +149,8 @@ class Env(Node):
 
         state = lidar + [distance_to_target, angle_to_target, linear_vel, angular_vel]
         
-        state = F.tanh(T.tensor(state)).tolist() 
-
+        state = F.tanh(T.tensor(state)).tolist()
+        
         return state
 
 
