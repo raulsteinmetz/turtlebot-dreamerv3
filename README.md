@@ -1,22 +1,14 @@
 # World Models for Autonomous Terrestrial Robot Navigation
 
-Reinforcement learning (RL) algorithms have proven to be highly effective for au-
-tonomous navigation of terrestrial robots using distance readings from infrared sen-
-sors as environment observations. However, current RL architectures for mobile nav-
-igation do not separate the processing of observations from policy learning, which
-limits their ability to handle large sets of sensor readings due to the extensive pa-
-rameter search space required for the policy network. This limitation forces the use
-of a small sample of the original sensor readings as observation, providing a poor
-description of the environment, increasing collision risk, and reducing navigation per-
-formance. Additionally, these architectures are model-free, missing the advantages
-of using a transition dynamics model that could improve decision-making. In this
-study, we present a new architecture for terrestrial robot navigation using distance
-readings, based on the DreamerV3 algorithm, which makes use of world modeling
-through an environment dynamics predictor and an autoencoder for observation
-processing. Our approach was tested on the TurtleBot3 robot in simulation and
-outperformed traditional algorithms with both full and reduced distance readings.
-Notably, it achieved 100% completion in all tested environments with full 360-degree
-readings.
+Reinforcement Learning (RL) algorithms are effective for simple autonomous terrestrial robot navigation tasks using
+infrared sensor distance readings as observations. However, current methods are limited as they directly process
+sensor data within policy networks, making it challenging to handle large sensor arrays, and do not utilize model-based
+approaches, reducing their decision-making capabilities. This study introduces a new model-based RL architecture for
+terrestrial robot navigation based on the DreamerV3 algorithm. It employs a world model containing an autoencoder
+for efficient sensor data processing and a dynamics predictor for enhanced decision-making. Comparative analysis of
+experiments conducted using the Turtlebot3 robot on a simulated setting demonstrates that our architecture effectively
+manages larger sensor datasets, significantly improving spatial awareness and navigation performance with both
+reduced sets and complete 360-degree sets of distance sensor readings.
 
 
 ### Results
